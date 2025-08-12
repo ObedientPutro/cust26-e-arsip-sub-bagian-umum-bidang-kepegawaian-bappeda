@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,7 +21,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'username',
         'password',
+        'role',
     ];
 
     /**
@@ -43,6 +46,28 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => UserRoleEnum::class
         ];
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
+
+    public function letters()
+    {
+        return $this->hasMany(Letter::class, 'user_id');
+    }
+
+    public function dispositions()
+    {
+        return $this->hasMany(Disposition::class, 'from_user_id');
+    }
+
+    public function dispositionRecipients()
+    {
+        return $this->hasMany(DispositionRecipient::class, 'to_user_id');
+    }
+
 }
