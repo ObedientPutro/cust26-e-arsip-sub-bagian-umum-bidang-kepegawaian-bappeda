@@ -37,7 +37,7 @@ class Disposition extends Model
             'disposition_recipients',
             'disposition_id',
             'to_user_id'
-        );
+        )->withPivot('status');
     }
 
 }

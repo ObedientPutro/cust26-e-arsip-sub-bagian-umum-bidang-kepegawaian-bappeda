@@ -71,7 +71,7 @@ const formatDate = (date) => dayjs(date).format('DD MMMM YYYY, HH:mm');
                             <h4 class="font-semibold text-sm mb-2">Penerima:</h4>
                             <ul class="space-y-1">
                                 <li v-for="recipient in disposition.recipients" :key="recipient.id" class="flex items-center gap-2 text-sm">
-                                    <div class="badge badge-sm" :class="recipient.pivot.status === 'dibaca' ? 'badge-success' : 'badge-info'">
+                                    <div class="badge badge-sm capitalize font-bold text-white" :class="recipient.pivot.status === 'dibaca' ? 'badge-success' : 'badge-info'">
                                         {{ recipient.pivot.status }}
                                     </div>
                                     <span>{{ recipient.name }}</span>
