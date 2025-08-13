@@ -9,14 +9,28 @@ const props = defineProps({
     },
     active: {
         type: Boolean,
+        default: false,
     },
+    underline: {
+        type: Boolean,
+        default: true,
+    }
 });
 
-const classes = computed(() =>
-    props.active
-        ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
-        : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out',
-);
+const classes = computed(() => {
+    let baseClasses = 'transition-colors duration-200';
+
+    if (props.active) {
+        baseClasses += ' text-green-600 font-semibold';
+        if (props.underline) {
+            baseClasses += ' nav-active';
+        }
+    } else {
+        baseClasses += ' text-gray-500 font-medium hover:text-green-600';
+    }
+
+    return baseClasses;
+});
 </script>
 
 <template>
@@ -24,3 +38,19 @@ const classes = computed(() =>
         <slot />
     </Link>
 </template>
+
+<style scoped>
+.nav-active {
+    position: relative;
+}
+.nav-active::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: #16a34a; /* Kode warna untuk text-green-600 */
+    bottom: -8px;
+    left: 0;
+    border-radius: 2px;
+}
+</style>
