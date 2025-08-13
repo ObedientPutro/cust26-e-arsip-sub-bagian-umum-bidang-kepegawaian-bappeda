@@ -24,5 +24,6 @@ class AppServiceProvider extends ServiceProvider
         Vite::prefetch(concurrency: 3);
         Route::model('incoming_letter', \App\Models\Letter::class);
         Route::model('outgoing_letter', \App\Models\Letter::class);
+        Route::model('disposition_incoming_letter', \App\Models\Disposition::class);
     }
 }

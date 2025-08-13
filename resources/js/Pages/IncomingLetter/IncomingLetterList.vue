@@ -12,6 +12,7 @@ import {
     PencilSquareIcon,
     MagnifyingGlassIcon,
     EyeIcon,
+    UserPlusIcon,
 } from "@heroicons/vue/24/solid";
 
 defineOptions({
@@ -128,7 +129,7 @@ const headers = [
 
             <!-- Kustomisasi Tampilan Kolom Status -->
             <template #col-disposition_status="{ item }">
-                <div v-if="item.is_disposed === true" class="badge badge-success badge-outline">Ditugaskan</div>
+                <div v-if="item.is_disposed" class="badge badge-success badge-outline">Ditugaskan</div>
                 <div v-else class="badge badge-error badge-outline">Belum Ada</div>
             </template>
 
@@ -140,14 +141,19 @@ const headers = [
             <!-- Mendefinisikan Tombol Aksi -->
             <template #col-actions="{ item }">
                 <div class="flex justify-center gap-1">
-                    <div class="tooltip" data-tip="Ubah">
-                        <a :href="route('incomingLetter.modify', item.id)" class="btn btn-warning btn-sm text-white">
-                            <PencilSquareIcon class="icon"/>
-                        </a>
-                    </div>
                     <div class="tooltip" data-tip="Lihat">
                         <a :href="route('incomingLetter.view', item.id)" class="btn btn-info btn-sm text-white">
                             <EyeIcon class="icon"/>
+                        </a>
+                    </div>
+                    <div class="tooltip" data-tip="Buat Disposisi">
+                        <a :href="route('dispositionIncomingLetter.new', item.id)" class="btn btn-primary btn-sm text-white">
+                            <UserPlusIcon class="icon"/>
+                        </a>
+                    </div>
+                    <div class="tooltip" data-tip="Ubah">
+                        <a :href="route('incomingLetter.modify', item.id)" class="btn btn-warning btn-sm text-white">
+                            <PencilSquareIcon class="icon"/>
                         </a>
                     </div>
                     <div class="tooltip" data-tip="Hapus">

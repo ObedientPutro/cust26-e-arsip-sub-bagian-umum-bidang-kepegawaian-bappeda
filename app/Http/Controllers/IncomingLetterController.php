@@ -72,9 +72,18 @@ class IncomingLetterController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Letter $letter)
+    public function show(Letter $letter): \Inertia\Response
     {
-        dd($letter);
+        $letter->load([
+            'category',
+            'user',
+            'dispositions.user',
+            'dispositions.recipients'
+        ]);
+
+        return Inertia::render('IncomingLetter/IncomingLetterView', [
+            'letter' => $letter
+        ]);
     }
 
     /**

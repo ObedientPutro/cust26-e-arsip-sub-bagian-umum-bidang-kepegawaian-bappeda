@@ -30,9 +30,14 @@ class Disposition extends Model
         return $this->belongsTo(User::class, 'from_user_id');
     }
 
-    public function dispositionRecipients()
+    public function recipients()
     {
-        return $this->hasMany(DispositionRecipient::class, 'disposition_id');
+        return $this->belongsToMany(
+            User::class,
+            'disposition_recipients',
+            'disposition_id',
+            'to_user_id'
+        );
     }
 
 }

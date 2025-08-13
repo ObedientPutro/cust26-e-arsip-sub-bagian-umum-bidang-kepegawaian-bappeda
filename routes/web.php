@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DispositionController;
 use App\Http\Controllers\IncomingLetterController;
 use App\Http\Controllers\OutgoingLetterController;
 use App\Http\Controllers\UserController;
@@ -60,5 +61,16 @@ Route::middleware(['auth', 'can:is-admin'])->group(function () {
     ]);
 });
 
+Route::middleware(['auth', 'can:is-admin', 'can:create-disposition'])->group(function() {
+    Route::resource('/disposition-incoming-letter', DispositionController::class)->names([
+        'index'   => 'dispositionIncomingLetter.index',
+        'show'    => 'dispositionIncomingLetter.view',
+        'edit'    => 'dispositionIncomingLetter.modify',
+        'update'  => 'dispositionIncomingLetter.update',
+        'destroy' => 'dispositionIncomingLetter.delete',
+    ])->except('create', 'store');
+    Route::get('/disposition-incoming-letter/create/{letter}', [DispositionController::class, 'create'])->name('dispositionIncomingLetter.new');
+    Route::post('/disposition-incoming-letter/store/{letter}', [DispositionController::class, 'store'])->name('dispositionIncomingLetter.save');
+});
 
 require __DIR__.'/auth.php';

@@ -21,7 +21,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('users')
                 ->cascadeOnUpdate();
-            $table->text('instructions');
+            $table->text('instruction');
             $table->timestamps();
         });
     }

@@ -82,9 +82,14 @@ class User extends Authenticatable
         return $this->hasMany(Disposition::class, 'from_user_id');
     }
 
-    public function dispositionRecipients()
+    public function receivedDispositions()
     {
-        return $this->hasMany(DispositionRecipient::class, 'to_user_id');
+        return $this->belongsToMany(
+            Disposition::class,
+            'disposition_recipients',
+            'to_user_id',
+            'disposition_id'
+        );
     }
 
 }
