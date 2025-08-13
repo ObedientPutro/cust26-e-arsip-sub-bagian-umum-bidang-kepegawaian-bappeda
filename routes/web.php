@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncomingLetterController;
+use App\Http\Controllers\OutgoingLetterController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,16 @@ Route::middleware('auth')->group(function () {
         'edit'    => 'incomingLetter.modify',
         'update'  => 'incomingLetter.update',
         'destroy' => 'incomingLetter.delete',
+    ]);
+
+    Route::resource('/outgoing-letter', OutgoingLetterController::class)->names([
+        'index'   => 'outgoingLetter.index',
+        'create'  => 'outgoingLetter.new',
+        'store'   => 'outgoingLetter.save',
+        'show'    => 'outgoingLetter.view',
+        'edit'    => 'outgoingLetter.modify',
+        'update'  => 'outgoingLetter.update',
+        'destroy' => 'outgoingLetter.delete',
     ]);
 });
 

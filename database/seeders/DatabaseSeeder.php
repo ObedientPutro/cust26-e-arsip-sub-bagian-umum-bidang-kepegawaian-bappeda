@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategorySeeder::class,
             IncomingLetterSeeder::class,
+            OutgoingLetterSeeder::class,
         ]);
     }
 }

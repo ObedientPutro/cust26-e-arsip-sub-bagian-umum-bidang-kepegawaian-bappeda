@@ -5,7 +5,7 @@ import InputLabel from "@/Components/Input/InputLabel.vue";
 import InputError from "@/Components/Input/InputError.vue";
 import FileInput from "@/Components/Input/FileInput.vue";
 import { computed } from 'vue';
-import {Head, Link, useForm} from "@inertiajs/vue3";
+import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import SelectInput from "@/Components/Input/SelectInput.vue";
 import DateInput from "@/Components/Input/DateInput.vue";
 
@@ -16,25 +16,43 @@ defineOptions({
 const props = defineProps({
     letter: Object,
     categories: Object,
+    numberParts: Object,
     errors: Object,
 });
 
+const page = usePage();
+const raceConditionError = computed(() => page.props.flash.error);
+
+const isEditMode = computed(() => !!props.letter);
+
+// Mode arsip hanya bisa diatur saat membuat surat baru, tidak bisa diubah saat edit.
+const isArchiveMode = computed(() => isEditMode.value ? !!props.letter.is_archive_mode : false);
+
 const form = useForm({
-    letter_number: props.letter?.letter_number || "",
-    subject: props.letter?.subject || "",
-    sender: props.letter?.sender || "",
-    letter_date: props.letter?.letter_date || "",
-    category_id: props.letter?.category_id || "",
+    is_archive_mode: isArchiveMode.value,
+    letter_number: props.letter?.letter_number || page.props.old?.letter_number || "",
+    letter_date: props.letter?.letter_date || page.props.old?.letter_date || "",
+    subject: props.letter?.subject || page.props.old?.subject || "",
+    category_id: props.letter?.category_id || page.props.old?.category_id || (Object.keys(props.categories)[0] || ""),
+    recipient: props.letter?.recipient || page.props.old?.recipient || "",
     attachment_file: null,
 });
 
-const isEditMode = computed(() => !!props.letter);
+const previewNumber = computed(() => {
+    if (isEditMode.value || isArchiveMode.value || !form.category_id) return '';
+
+    const category = props.categories[form.category_id];
+    const classificationCode = category ? category.classification_code : 'XXX';
+    const sequencePadded = String(props.numberParts.sequence).padStart(3, '0');
+
+    return `${sequencePadded}/${classificationCode}/${props.numberParts.unit_code}/${props.numberParts.roman_month}/${props.numberParts.year}`;
+});
 
 // Handle form submission
 const submitForm = () => {
     const url = props.letter
-        ? route("incomingLetter.update", props.letter.id)
-        : route("incomingLetter.save");
+        ? route("outgoingLetter.update", props.letter.id)
+        : route("outgoingLetter.save");
 
     form.post(url, {
         forceFormData: true,
@@ -50,18 +68,29 @@ const submitForm = () => {
 </script>
 
 <template>
-    <Head v-if="route().current('incomingLetter.new')" title="Tambah Surat Masuk" />
-    <Head v-if="route().current('incomingLetter.modify')" title="Ubah Surat Masuk" />
+    <Head v-if="route().current('outgoingLetter.new')" title="Tambah Surat Keluar" />
+    <Head v-if="route().current('outgoingLetter.modify')" title="Ubah Surat Keluar" />
 
     <div class="bg-base-100 overflow-hidden shadow-md rounded-lg p-6">
         <form @submit.prevent="submitForm" class="mx-2">
+            <div v-if="!isEditMode && raceConditionError" class="alert alert-error mb-4">
+                <span>{{ raceConditionError }}</span>
+            </div>
+
             <div class="space-y-12">
                 <div class="border-b border-gray-900/10 pb-12">
 
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
-                        <!-- Letter Number Input -->
-                        <div class="sm:col-span-4">
+                        <div v-if="!isEditMode" class="sm:col-span-4">
+                            <label class="label cursor-pointer gap-2">
+                                <span class="label-text">Arsipkan Surat Lama (Input Manual)</span>
+                                <input type="checkbox" v-model="form.is_archive_mode" class="checkbox checkbox-primary" />
+                            </label>
+                        </div>
+
+                        <div v-if="form.is_archive_mode || isEditMode" class="sm:col-span-4">
+                            <!-- Letter Number Input -->
                             <div class="mt-2">
                                 <InputLabel for="letter_number" value="Nomor Surat" />
 
@@ -76,11 +105,9 @@ const submitForm = () => {
 
                                 <InputError :message="form.errors.letter_number" class="mt-2" />
                             </div>
-                        </div>
 
-                        <!-- Date Input -->
-                        <div class="sm:col-span-4">
-                            <div class="mt-2">
+                            <!-- Date Input -->
+                            <div class="mt-6">
                                 <InputLabel for="letter_date" value="Tanggal Surat" />
 
                                 <DateInput
@@ -91,6 +118,32 @@ const submitForm = () => {
                                 />
 
                                 <InputError :message="form.errors.letter_date" class="mt-2" />
+                            </div>
+                        </div>
+
+                        <div v-if="!isEditMode && !form.is_archive_mode"  class="sm:col-span-4">
+                            <div class="alert alert-info">
+                                <span>Nomor Surat akan dibuat otomatis: <strong>{{ previewNumber }}</strong></span>
+                            </div>
+                        </div>
+
+                        <hr v-if="!isEditMode" class="my-4"/>
+
+                        <!-- Category Input -->
+                        <div class="sm:col-span-4">
+                            <div class="mt-2">
+                                <InputLabel for="category" value="Kategori Surat" />
+
+                                <SelectInput
+                                    class="capitalize"
+                                    v-model="form.category_id"
+                                    :items="Object.values(categories)"
+                                    item-value="id"
+                                    item-text="name"
+                                    placeholder="Pilih Kategori"
+                                />
+
+                                <InputError :message="form.errors.category_id" class="mt-2" />
                             </div>
                         </div>
 
@@ -112,39 +165,21 @@ const submitForm = () => {
                             </div>
                         </div>
 
-                        <!-- Sender Input -->
+                        <!-- Recipient Input -->
                         <div class="sm:col-span-4">
                             <div class="mt-2">
-                                <InputLabel for="sender" value="Pengirim Surat" />
+                                <InputLabel for="recipient" value="Penerima Surat" />
 
                                 <TextInput
-                                    id="sender"
-                                    ref="sender"
-                                    v-model="form.sender"
+                                    id="recipient"
+                                    ref="recipient"
+                                    v-model="form.recipient"
                                     type="text"
                                     class="mt-1 block w-full"
                                     placeholder="Contoh: Kementerian Dalam Negeri"
                                 />
 
-                                <InputError :message="form.errors.sender" class="mt-2" />
-                            </div>
-                        </div>
-
-                        <!-- Category Input -->
-                        <div class="sm:col-span-4">
-                            <div class="mt-2">
-                                <InputLabel for="category" value="Kategori Surat" />
-
-                                <SelectInput
-                                    class="capitalize"
-                                    v-model="form.category_id"
-                                    :items="categories"
-                                    item-value="id"
-                                    item-text="name"
-                                    placeholder="Pilih Kategori"
-                                />
-
-                                <InputError :message="form.errors.category_id" class="mt-2" />
+                                <InputError :message="form.errors.recipient" class="mt-2" />
                             </div>
                         </div>
 
@@ -173,7 +208,7 @@ const submitForm = () => {
             </div>
 
             <div class="mt-6 flex items-center justify-end gap-x-6">
-                <Link :href="route('incomingLetter.index')" class="btn btn-ghost">Batal</Link>
+                <Link :href="route('outgoingLetter.index')" class="btn btn-ghost">Batal</Link>
                 <button type="submit" class="btn text-white bg-blue-600 hover:bg-blue-700" :disabled="form.processing">
                     <span v-if="form.processing" class="loading loading-spinner"></span>
                     {{ isEditMode ? 'Update Surat Masuk' : 'Simpan Surat Masuk' }}

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('letter_number')->unique();
             $table->string('subject');
             $table->string('sender')->nullable();
+            $table->string('recipient')->nullable();
             $table->date('letter_date');
             $table->string('type');
             $table->string('file_path');

@@ -41,5 +41,13 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('update-incoming-letter', function (User $user) {
             return in_array($user->role, [UserRoleEnum::Admin, UserRoleEnum::Lead, UserRoleEnum::Employee]);
         });
+
+        Gate::define('create-outgoing-letter', function (User $user) {
+            return in_array($user->role, [UserRoleEnum::Admin, UserRoleEnum::Lead, UserRoleEnum::Employee]);
+        });
+
+        Gate::define('update-outgoing-letter', function (User $user) {
+            return in_array($user->role, [UserRoleEnum::Admin, UserRoleEnum::Lead, UserRoleEnum::Employee]);
+        });
     }
 }

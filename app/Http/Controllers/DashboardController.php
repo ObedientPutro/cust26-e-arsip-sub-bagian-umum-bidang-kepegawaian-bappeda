@@ -25,7 +25,7 @@ class DashboardController extends Controller
 
         $headers = [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $letter->letter_number . '"',
+            'Content-Disposition' => 'inline; filename="' . $letter->letter_number . '.pdf' . '"',
         ];
 
         return response()->file($fullPath, $headers);
