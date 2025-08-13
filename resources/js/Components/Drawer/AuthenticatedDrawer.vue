@@ -62,7 +62,7 @@ const auth = computed(() => usePage().props.auth);
                         </template>
                     </SidebarLink>
                 </li>
-                <li>
+                <li v-if="auth.user.role_label === 'admin'">
                     <SidebarLink :href="route('user.index')" :active="route().current('user.*')">
                         <template #icon>
                             <UserGroupIcon />
@@ -72,8 +72,8 @@ const auth = computed(() => usePage().props.auth);
                         </template>
                     </SidebarLink>
                 </li>
-                <li>
-                    <SidebarLink :href="route('home')" :active="route().current('home')">
+                <li v-if="auth.user.role_label === 'admin'">
+                    <SidebarLink :href="route('category.index')" :active="route().current('category.*')">
                         <template #icon>
                             <FolderPlusIcon />
                         </template>

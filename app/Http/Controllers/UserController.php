@@ -29,7 +29,7 @@ class UserController extends Controller
                 $subQuery->where('username', 'like', "%{$search}%")
                     ->orWhere('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('role', 'like', "%{$search}%");;
+                    ->orWhere('role', 'like', "%{$search}%");
             });
         });
 
