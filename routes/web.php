@@ -15,6 +15,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::patch('/dashboard/dispositions/{disposition}/read', [DashboardController::class, 'markDispositionAsRead'])->name('dashboard.markAsRead');
 
     Route::get('/document/{letter}/file', [DashboardController::class, 'streamFile'])->name('document.file');
 

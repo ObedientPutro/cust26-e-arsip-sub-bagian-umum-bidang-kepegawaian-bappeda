@@ -5,7 +5,7 @@ import InputLabel from '@/Components/Input/InputLabel.vue';
 import TextInput from '@/Components/Input/TextInput.vue';
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import {
-    BookOpenIcon,
+    ArchiveBoxIcon,
 } from "@heroicons/vue/24/outline";
 
 defineOptions({
@@ -36,7 +36,7 @@ const submit = () => {
                 <div class="z-10">
                     <div class="flex items-center justify-center pb-8">
                         <div class="bg-white p-3 rounded-full shadow-lg">
-                            <BookOpenIcon class="icon" />
+                            <ArchiveBoxIcon class="icon" />
                         </div>
                     </div>
 

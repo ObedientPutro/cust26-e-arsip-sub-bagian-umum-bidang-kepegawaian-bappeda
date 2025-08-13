@@ -89,7 +89,7 @@ class User extends Authenticatable
             'disposition_recipients',
             'to_user_id',
             'disposition_id'
-        );
+        )->withPivot('status');
     }
 
 }

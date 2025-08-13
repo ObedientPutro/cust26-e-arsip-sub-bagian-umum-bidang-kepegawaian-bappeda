@@ -60,7 +60,7 @@ const formatDate = (date) => dayjs(date).format('DD MMMM YYYY, HH:mm');
                                     Dibuat oleh <strong>{{ disposition.user.name }}</strong> pada {{ formatDate(disposition.created_at) }}
                                 </p>
                             </div>
-                            <div class="flex gap-2">
+                            <div v-if="$page.props.auth.user.role_label !== 'pegawai'" class="flex gap-2">
                                 <Link :href="route('dispositionIncomingLetter.modify', disposition.id)" class="btn btn-xs btn-outline btn-warning">
                                     <PencilSquareIcon class="size-4" />
                                 </Link>
