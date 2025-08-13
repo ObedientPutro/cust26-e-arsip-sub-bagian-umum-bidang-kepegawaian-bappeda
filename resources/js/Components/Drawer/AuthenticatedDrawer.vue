@@ -43,7 +43,7 @@ const auth = computed(() => usePage().props.auth);
                     </SidebarLink>
                 </li>
                 <li>
-                    <SidebarLink :href="route('home')" :active="route().current('home')">
+                    <SidebarLink :href="route('incomingLetter.index')" :active="route().current('incomingLetter.*')">
                         <template #icon>
                             <DocumentPlusIcon />
                         </template>

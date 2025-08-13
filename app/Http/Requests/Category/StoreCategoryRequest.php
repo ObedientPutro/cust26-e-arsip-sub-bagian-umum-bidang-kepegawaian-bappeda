@@ -24,7 +24,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'classification_code' => ['required', 'string', 'lowercase', 'regex:/^\S*$/', Rule::unique('categories')],
+            'classification_code' => ['required', 'string', 'lowercase', 'regex:/^\S*$/', Rule::unique('categories', 'classification_code')],
         ];
     }
 }

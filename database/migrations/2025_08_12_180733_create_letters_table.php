@@ -21,11 +21,13 @@ return new class extends Migration
                 ->references('id')
                 ->on('categories')
                 ->cascadeOnUpdate();
-            $table->string('letter_number');
+            $table->string('letter_number')->unique();
             $table->string('subject');
+            $table->string('sender')->nullable();
             $table->date('letter_date');
             $table->string('type');
             $table->string('file_path');
+            $table->boolean('is_disposed')->default(false);
             $table->timestamps();
         });
     }

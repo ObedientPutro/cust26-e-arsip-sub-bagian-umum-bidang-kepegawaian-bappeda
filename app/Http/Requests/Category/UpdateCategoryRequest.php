@@ -24,7 +24,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'classification_code' => ['required', 'string', 'lowercase', 'regex:/^\S*$/', Rule::unique('categories')->ignore($this->category->id)],
+            'classification_code' => ['required', 'string', 'lowercase', 'regex:/^\S*$/', Rule::unique('categories', 'classification_code')->ignore($this->category->id)],
         ];
     }
 }

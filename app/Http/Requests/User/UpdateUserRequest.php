@@ -27,8 +27,8 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'email' => ['required', 'email', Rule::unique('users')->ignore($this->user->id)],
-            'username' => ['required', 'string', 'lowercase', 'regex:/^\S*$/', Rule::unique('users')->ignore($this->user->id)],
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->user->id)],
+            'username' => ['required', 'string', 'lowercase', 'regex:/^\S*$/', Rule::unique('users', 'username')->ignore($this->user->id)],
             'password' => ['nullable', Rules\Password::defaults()],
             'role' => ['required', new Enum(UserRoleEnum::class)],
         ];

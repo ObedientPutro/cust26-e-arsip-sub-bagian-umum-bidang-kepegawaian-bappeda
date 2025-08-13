@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import {PhotoIcon} from "@heroicons/vue/24/solid/index.js";
+import { DocumentArrowUpIcon } from "@heroicons/vue/24/solid";
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -57,14 +57,14 @@ const preventDefault = (event) => {
              @drop="handleDrop">
 
             <div class="text-center">
-                <PhotoIcon class="mx-auto size-12 text-gray-300" />
+                <DocumentArrowUpIcon class="mx-auto size-12 text-gray-300" />
                 <p class="mt-4 text-sm text-gray-600">Click to upload or drag and drop</p>
-                <p class="text-xs text-gray-500">PNG up to 10MB</p>
+                <p class="text-xs text-gray-500">Hanya PDF, maksimal 10MB</p>
             </div>
         </div>
 
         <input ref="fileInput" type="file" :accept="accept" class="hidden" @change="handleFileChange">
-        <p v-if="fileName" class="mt-2 text-sm text-gray-500">Selected: {{ fileName }}</p>
+        <p v-if="fileName" class="mt-2 text-sm text-gray-500">Terpilih: {{ fileName }}</p>
     </div>
 </template>
 

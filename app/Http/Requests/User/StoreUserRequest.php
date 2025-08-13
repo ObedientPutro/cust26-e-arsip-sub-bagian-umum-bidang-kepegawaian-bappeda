@@ -27,8 +27,8 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'email' => ['required', 'email', Rule::unique('users')],
-            'username' => ['required', 'string', 'lowercase', 'regex:/^\S*$/', Rule::unique('users')],
+            'email' => ['required', 'email', Rule::unique('users', 'email')],
+            'username' => ['required', 'string', 'lowercase', 'regex:/^\S*$/', Rule::unique('users', 'username')],
             'password' => ['required', Rules\Password::defaults()],
             'role' => ['required', new Enum(UserRoleEnum::class)],
         ];

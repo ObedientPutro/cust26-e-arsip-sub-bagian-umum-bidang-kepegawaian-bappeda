@@ -70,7 +70,7 @@ const formatDate = (dateString) => {
 
 const headers = [
     { key: 'no', label: 'No.', class: 'text-center' },
-    { key: 'name', label: 'Mata Pelajaran', class: 'text-center' },
+    { key: 'name', label: 'Kategori / Klasifikasi', class: 'text-center' },
     { key: 'classification_code', label: 'Kode', class: 'text-center' },
     { key: 'created_at', label: 'Tanggal Ditambahkan', class: 'text-center' },
 ];

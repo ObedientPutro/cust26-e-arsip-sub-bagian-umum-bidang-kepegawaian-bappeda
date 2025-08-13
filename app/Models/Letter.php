@@ -20,9 +20,11 @@ class Letter extends Model
         'category_id',
         'letter_number',
         'subject',
+        'sender',
         'letter_date',
         'type',
         'file_path',
+        'is_disposed',
     ];
 
     /**
