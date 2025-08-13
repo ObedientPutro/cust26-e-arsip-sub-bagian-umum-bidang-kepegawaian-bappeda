@@ -62,26 +62,13 @@ onUnmounted(() => {
             ></div>
         </Transition>
 
-
         <!-- Modal with pop animation -->
-        <Transition
-            enter-active-class="transition ease-out duration-300 transform"
-            enter-from-class="translate-y-[100%] opacity-0"
-            enter-to-class="translate-y-0 opacity-100"
-            leave-active-class="transition ease-in duration-200 transform"
-            leave-from-class="translate-y-0 opacity-100"
-            leave-to-class="translate-y-[100%] opacity-0"
-        >
-            <dialog v-if="show" open class="modal modal-bottom sm:modal-middle fixed" @click.self="close">
-                <div class="modal-box">
-                    <!-- Close button (top-right corner with icon) -->
-                    <button class="btn btn-sm btn-ghost btn-circle absolute right-2 top-2" @click="close">✕</button>
-
-                    <!-- Content Slot -->
-                    <slot />
-                </div>
-            </dialog>
-        </Transition>
+        <dialog v-if="show" open class="modal modal-bottom sm:modal-middle" @click.self="close">
+            <div class="modal-box">
+                <button class="btn btn-sm btn-ghost btn-circle absolute right-2 top-2" @click="close">✕</button>
+                <slot />
+            </div>
+        </dialog>
 
     </Teleport>
 </template>

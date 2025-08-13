@@ -63,7 +63,7 @@ const auth = computed(() => usePage().props.auth);
                     </SidebarLink>
                 </li>
                 <li>
-                    <SidebarLink :href="route('home')" :active="route().current('home')">
+                    <SidebarLink :href="route('user.index')" :active="route().current('user.*')">
                         <template #icon>
                             <UserGroupIcon />
                         </template>
