@@ -38,6 +38,16 @@ Route::middleware('auth')->group(function () {
         'update'  => 'outgoingLetter.update',
         'destroy' => 'outgoingLetter.delete',
     ]);
+
+    Route::resource('/disposition-incoming-letter', DispositionController::class)->names([
+        'index'   => 'dispositionIncomingLetter.index',
+        'show'    => 'dispositionIncomingLetter.view',
+        'edit'    => 'dispositionIncomingLetter.modify',
+        'update'  => 'dispositionIncomingLetter.update',
+        'destroy' => 'dispositionIncomingLetter.delete',
+    ])->except('create', 'store');
+    Route::get('/disposition-incoming-letter/create/{letter}', [DispositionController::class, 'create'])->name('dispositionIncomingLetter.new');
+    Route::post('/disposition-incoming-letter/store/{letter}', [DispositionController::class, 'store'])->name('dispositionIncomingLetter.save');
 });
 
 Route::middleware(['auth', 'can:is-admin'])->group(function () {
@@ -60,18 +70,6 @@ Route::middleware(['auth', 'can:is-admin'])->group(function () {
         'update'  => 'category.update',
         'destroy' => 'category.delete',
     ]);
-});
-
-Route::middleware(['auth', 'can:is-admin', 'can:create-disposition'])->group(function() {
-    Route::resource('/disposition-incoming-letter', DispositionController::class)->names([
-        'index'   => 'dispositionIncomingLetter.index',
-        'show'    => 'dispositionIncomingLetter.view',
-        'edit'    => 'dispositionIncomingLetter.modify',
-        'update'  => 'dispositionIncomingLetter.update',
-        'destroy' => 'dispositionIncomingLetter.delete',
-    ])->except('create', 'store');
-    Route::get('/disposition-incoming-letter/create/{letter}', [DispositionController::class, 'create'])->name('dispositionIncomingLetter.new');
-    Route::post('/disposition-incoming-letter/store/{letter}', [DispositionController::class, 'store'])->name('dispositionIncomingLetter.save');
 });
 
 require __DIR__.'/auth.php';

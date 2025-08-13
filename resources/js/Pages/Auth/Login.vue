@@ -36,13 +36,18 @@ const submit = () => {
                 <div class="z-10">
                     <div class="flex items-center justify-center pb-8">
                         <div class="bg-white p-3 rounded-full shadow-lg">
-                            <ArchiveBoxIcon class="icon" />
+                            <img src="logo.png" alt="Logo" class="h-14 w-auto"/>
                         </div>
                     </div>
 
                     <h2 class="text-2xl font-bold mb-4" data-aos="slide-down">Selamat Datang di</h2>
 
                     <div class="flex items-center justify-center mb-6" data-aos="slide-down">
+                        <div class="flex items-center justify-center pr-5">
+                            <div class="bg-white p-3 rounded-full shadow-lg">
+                                <ArchiveBoxIcon class="icon" />
+                            </div>
+                        </div>
                         <span class="text-4xl font-bold tracking-wider">E-ARSIP BAPPEDA</span>
                     </div>
 

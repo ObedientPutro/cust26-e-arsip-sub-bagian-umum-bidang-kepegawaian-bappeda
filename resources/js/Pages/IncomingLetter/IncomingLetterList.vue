@@ -146,28 +146,18 @@ const headers = [
                             <EyeIcon class="icon"/>
                         </a>
                     </div>
-                    <div v-if="$page.props.auth.user.role_label !== 'pegawai'" class="tooltip" data-tip="Buat Disposisi">
+                    <div class="tooltip" data-tip="Buat Disposisi">
                         <a :href="route('dispositionIncomingLetter.new', item.id)" class="btn btn-primary btn-sm text-white">
                             <UserPlusIcon class="icon"/>
                         </a>
                     </div>
-                    <div v-if="$page.props.auth.user.username === item.user.username || $page.props.auth.user.role_label === 'admin'" class="tooltip" data-tip="Ubah">
+                    <div class="tooltip" data-tip="Ubah">
                         <a :href="route('incomingLetter.modify', item.id)" class="btn btn-warning btn-sm text-white">
                             <PencilSquareIcon class="icon"/>
                         </a>
                     </div>
-                    <div v-else class="tooltip" data-tip="Ubah">
-                        <a class="btn btn-warning btn-sm text-white" disabled="">
-                            <PencilSquareIcon class="icon"/>
-                        </a>
-                    </div>
-                    <div v-if="$page.props.auth.user.username === item.user.username || $page.props.auth.user.role_label === 'admin'" class="tooltip" data-tip="Hapus">
+                    <div class="tooltip" data-tip="Hapus">
                         <button @click="confirmDelete(item)" class="btn btn-error btn-sm text-white">
-                            <TrashIcon class="icon"/>
-                        </button>
-                    </div>
-                    <div v-else class="tooltip" data-tip="Hapus">
-                        <button class="btn btn-error btn-sm text-white" disabled>
                             <TrashIcon class="icon"/>
                         </button>
                     </div>

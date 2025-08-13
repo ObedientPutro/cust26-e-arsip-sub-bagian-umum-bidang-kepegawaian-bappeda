@@ -122,7 +122,7 @@ const headers = [
 
             <!-- Mendefinisikan Tombol Aksi -->
             <template #col-actions="{ item }">
-                <div v-if="$page.props.auth.user.username === item.user.username || $page.props.auth.user.role_label === 'admin'" class="flex justify-center gap-1">
+                <div class="flex justify-center gap-1">
                     <div class="tooltip" data-tip="Ubah">
                         <a :href="route('outgoingLetter.modify', item.id)" class="btn btn-warning btn-sm text-white">
                             <PencilSquareIcon class="icon"/>
@@ -130,18 +130,6 @@ const headers = [
                     </div>
                     <div class="tooltip" data-tip="Hapus">
                         <button @click="confirmDelete(item)" class="btn btn-error btn-sm text-white">
-                            <TrashIcon class="icon"/>
-                        </button>
-                    </div>
-                </div>
-                <div v-else class="flex justify-center gap-1">
-                    <div class="tooltip" data-tip="Ubah">
-                        <a class="btn btn-warning btn-sm text-white" disabled>
-                            <PencilSquareIcon class="icon"/>
-                        </a>
-                    </div>
-                    <div class="tooltip" data-tip="Hapus">
-                        <button class="btn btn-error btn-sm text-white" disabled>
                             <TrashIcon class="icon"/>
                         </button>
                     </div>
