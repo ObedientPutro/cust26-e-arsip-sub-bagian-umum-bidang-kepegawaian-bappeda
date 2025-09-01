@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Letter;
 use App\Models\User;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;
 
 class DashboardService
@@ -16,11 +17,11 @@ class DashboardService
     /**
      * Mengambil data yang sesuai untuk dashboard berdasarkan peran pengguna.
      */
-    public function getDataForDashboard(User $user): array
+    public function getDataForDashboard(User $user, array $filters = []): array
     {
         return match ($user->role) {
-            UserRoleEnum::Admin => $this->getAdminData(),
-            UserRoleEnum::Lead => $this->getPimpinanData(),
+            UserRoleEnum::Admin => $this->getAdminData($filters),
+            UserRoleEnum::Lead => $this->getPimpinanData($filters),
             UserRoleEnum::Employee => $this->getPegawaiData($user),
             default => [],
         };
@@ -29,7 +30,7 @@ class DashboardService
     /**
      * Data untuk dashboard Admin.
      */
-    private function getAdminData(): array
+    private function getAdminData(array $filters): array
     {
         return [
             'stats' => [
@@ -38,17 +39,17 @@ class DashboardService
                 'incoming_letters' => Letter::where('type', LetterTypeEnum::Incoming)->count(),
                 'outgoing_letters' => Letter::where('type', LetterTypeEnum::Outgoing)->count(),
             ],
-            'chart' => $this->getLetterTrendData(),
+            'chart' => $this->getLetterTrendData($filters),
         ];
     }
 
     /**
      * Data untuk dashboard Pimpinan.
      */
-    private function getPimpinanData(): array
+    private function getPimpinanData(array $filters): array
     {
         return [
-            'chart' => $this->getLetterTrendData(),
+            'chart' => $this->getLetterTrendData($filters),
         ];
     }
 
@@ -69,14 +70,13 @@ class DashboardService
     /**
      * Menyiapkan data untuk grafik tren surat bulanan.
      */
-    private function getLetterTrendData(): array
+    private function getLetterTrendData(array $filters = []): array
     {
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
-        $daysInMonth = $startOfMonth->daysInMonth;
+        $startDate = isset($filters['start_date']) ? Carbon::parse($filters['start_date']) : Carbon::now()->startOfMonth();
+        $endDate = isset($filters['end_date']) ? Carbon::parse($filters['end_date']) : Carbon::now()->endOfMonth();
 
         $incoming = Letter::where('type', LetterTypeEnum::Incoming)
-            ->whereBetween('letter_date', [$startOfMonth, $endOfMonth])
+            ->whereBetween('letter_date', [$startDate, $endDate])
             ->groupBy('date')
             ->orderBy('date')
             ->get([
@@ -84,9 +84,14 @@ class DashboardService
                 DB::raw('COUNT(*) as count')
             ])->pluck('count', 'date');
 
-        $outgoing = Letter::where('type', LetterTypeEnum::Outgoing)
-            ->whereBetween('letter_date', [$startOfMonth, $endOfMonth])
-            ->groupBy('date')
+        $outgoingQuery = Letter::where('type', LetterTypeEnum::Outgoing)
+            ->whereBetween('letter_date', [$startDate, $endDate]);
+
+        if (!empty($filters['category_id'])) {
+            $outgoingQuery->where('category_id', $filters['category_id']);
+        }
+
+        $outgoing = $outgoingQuery->groupBy('date')
             ->orderBy('date')
             ->get([
                 DB::raw('DATE(letter_date) as date'),
@@ -97,13 +102,13 @@ class DashboardService
         $incomingData = [];
         $outgoingData = [];
 
-        for ($i = 1; $i <= $daysInMonth; $i++) {
-            $date = $startOfMonth->copy()->addDays($i - 1)->format('Y-m-d');
-            $dayLabel = $startOfMonth->copy()->addDays($i - 1)->format('d M');
-
-            $labels[] = $dayLabel;
-            $incomingData[] = $incoming[$date] ?? 0;
-            $outgoingData[] = $outgoing[$date] ?? 0;
+        // Buat label dan data berdasarkan rentang tanggal yang dipilih
+        $period = CarbonPeriod::create($startDate, $endDate);
+        foreach ($period as $date) {
+            $dateString = $date->format('Y-m-d');
+            $labels[] = $date->format('d M');
+            $incomingData[] = $incoming[$dateString] ?? 0;
+            $outgoingData[] = $outgoing[$dateString] ?? 0;
         }
 
         return [

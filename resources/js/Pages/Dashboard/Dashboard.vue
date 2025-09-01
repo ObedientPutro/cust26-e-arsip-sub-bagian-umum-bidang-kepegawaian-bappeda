@@ -4,7 +4,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import WelcomeBanner from "@/Components/Dashboard/WelcomeBanner.vue";
 import SmallCard from "@/Components/Dashboard/SmallCard.vue";
 import DataTable from "@/Components/DataTable.vue";
-import VueApexCharts from "vue3-apexcharts"; // Import chart
+import DashboardChart from "@/Pages/Dashboard/Partial/DashboardChart.vue";
 import {
     UsersIcon, InboxArrowDownIcon, PaperAirplaneIcon, DocumentDuplicateIcon, CheckCircleIcon
 } from "@heroicons/vue/24/solid";
@@ -15,14 +15,9 @@ defineOptions({
 
 const props = defineProps({
     dashboardData: Object,
+    categories: Array,
+    filters: Object,
 });
-
-const chartOptions = {
-    chart: { type: 'area', toolbar: { show: false } },
-    xaxis: { categories: props.dashboardData?.chart?.labels || [] },
-    dataLabels: { enabled: false },
-    stroke: { curve: 'smooth' },
-};
 
 const unreadHeaders = [
     { key: 'from', label: 'Dari Surat' },
@@ -57,12 +52,11 @@ const readHeaders = [
     </div>
 
     <div v-if="$page.props.auth.user.role === 'pimpinan' || $page.props.auth.user.role === 'admin'" class="mt-8">
-        <div class="card bg-base-100 shadow-md">
-            <div class="card-body">
-                <h2 class="card-title">Tren Surat Bulan Ini</h2>
-                <VueApexCharts type="area" :options="chartOptions" :series="dashboardData.chart.series" />
-            </div>
-        </div>
+        <DashboardChart
+            :chartData="dashboardData.chart"
+            :categories="categories"
+            :filters="filters"
+        />
     </div>
 
     <div v-if="$page.props.auth.user.role === 'pegawai'" class="mt-8 space-y-8">

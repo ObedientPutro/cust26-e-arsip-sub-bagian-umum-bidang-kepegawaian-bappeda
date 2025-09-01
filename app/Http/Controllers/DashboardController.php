@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DispositionStatusEnum;
+use App\Enums\LetterTypeEnum;
+use App\Models\Category;
 use App\Models\Disposition;
 use App\Models\Letter;
 use App\Services\DashboardService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -15,12 +18,22 @@ class DashboardController extends Controller
         protected DashboardService $dashboardService
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
-        $dashboardData = $this->dashboardService->getDataForDashboard(auth()->user());
+        $filters = $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'category_id' => 'nullable|exists:categories,id',
+        ]);
+
+        $dashboardData = $this->dashboardService->getDataForDashboard(auth()->user(), $filters);
 
         return Inertia::render('Dashboard/Dashboard', [
-            'dashboardData' => $dashboardData
+            'dashboardData' => $dashboardData,
+            'categories' => Category::whereHas('letters', function ($q) {
+                $q->where('type', LetterTypeEnum::Outgoing);
+            })->get(['id', 'name']),
+            'filters' => $filters,
         ]);
     }
 
