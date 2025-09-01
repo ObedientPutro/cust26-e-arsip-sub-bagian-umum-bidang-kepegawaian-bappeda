@@ -25,7 +25,6 @@ class StoreIncomingLetterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => ['required', 'integer', Rule::exists('categories', 'id')],
             'letter_number' => ['required', 'string', 'max:255', Rule::unique('letters', 'letter_number')],
             'subject' => ['required', 'string', 'max:255'],
             'letter_date' => ['required', 'date', 'before_or_equal:today'],

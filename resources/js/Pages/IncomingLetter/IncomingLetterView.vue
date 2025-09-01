@@ -33,7 +33,6 @@ const formatDate = (date) => dayjs(date).format('DD MMMM YYYY, HH:mm');
                 <div class="divider my-2"></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-base">
                     <div><strong>Nomor Surat:</strong> {{ letter.letter_number }}</div>
-                    <div><strong>Kategori:</strong> {{ letter.category.name }}</div>
                     <div><strong>Perihal:</strong> {{ letter.subject }}</div>
                     <div><strong>Pengirim:</strong> {{ letter.sender }}</div>
                     <div><strong>Tanggal Surat:</strong> {{ formatDate(letter.letter_date) }}</div>

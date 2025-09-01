@@ -5,7 +5,7 @@ import InputLabel from "@/Components/Input/InputLabel.vue";
 import InputError from "@/Components/Input/InputError.vue";
 import FileInput from "@/Components/Input/FileInput.vue";
 import { computed } from 'vue';
-import {Head, Link, useForm} from "@inertiajs/vue3";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 import SelectInput from "@/Components/Input/SelectInput.vue";
 import DateInput from "@/Components/Input/DateInput.vue";
 
@@ -24,7 +24,6 @@ const form = useForm({
     subject: props.letter?.subject || "",
     sender: props.letter?.sender || "",
     letter_date: props.letter?.letter_date || "",
-    category_id: props.letter?.category_id || "",
     attachment_file: null,
 });
 
@@ -127,24 +126,6 @@ const submitForm = () => {
                                 />
 
                                 <InputError :message="form.errors.sender" class="mt-2" />
-                            </div>
-                        </div>
-
-                        <!-- Category Input -->
-                        <div class="sm:col-span-4">
-                            <div class="mt-2">
-                                <InputLabel for="category" value="Kategori Surat" />
-
-                                <SelectInput
-                                    class="capitalize"
-                                    v-model="form.category_id"
-                                    :items="categories"
-                                    item-value="id"
-                                    item-text="name"
-                                    placeholder="Pilih Kategori"
-                                />
-
-                                <InputError :message="form.errors.category_id" class="mt-2" />
                             </div>
                         </div>
 

@@ -17,7 +17,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('users')
                 ->cascadeOnUpdate();
-            $table->foreignId('category_id')
+            $table->foreignId('category_id')->nullable()
                 ->references('id')
                 ->on('categories')
                 ->cascadeOnUpdate();

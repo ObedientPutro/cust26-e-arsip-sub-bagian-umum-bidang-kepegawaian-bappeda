@@ -111,7 +111,6 @@ const headers = [
                         >
                             {{ item.letter_number }}
                         </a>
-                        <div class="text-xs capitalize">{{ item.category.name }}, {{ item.category.classification_code }}</div>
                         <div class="text-xs opacity-70 capitalize">Ditambahkan Oleh, {{ item.user.name }}</div>
                     </div>
                 </div>
@@ -171,7 +170,6 @@ const headers = [
                         <div class="flex items-center gap-3">
                             <div>
                                 <div class="font-bold capitalize">{{ item.letter_number }}</div>
-                                <div class="text-xs opacity-70 capitalize">{{ item.category.name }}, {{ item.category.classification_code }}</div>
                             </div>
                         </div>
                         <div class="flex gap-1">

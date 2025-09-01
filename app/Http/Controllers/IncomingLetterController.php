@@ -34,9 +34,6 @@ class IncomingLetterController extends Controller
                     ->orWhere('sender', 'like', "%{$search}%")
                     ->orWhereHas('user', function ($userQuery) use ($search) {
                         $userQuery->where('name', 'like', "%{$search}%");
-                    })
-                    ->orWhereHas('category', function ($categoryQuery) use ($search) {
-                        $categoryQuery->where('name', 'like', "%{$search}%");
                     });
             });
         });
@@ -75,7 +72,6 @@ class IncomingLetterController extends Controller
     public function show(Letter $letter): \Inertia\Response
     {
         $letter->load([
-            'category',
             'user',
             'dispositions.user',
             'dispositions.recipients'
@@ -93,7 +89,6 @@ class IncomingLetterController extends Controller
     {
         return Inertia::render('IncomingLetter/IncomingLetterForm', [
             'letter' => $letter,
-            'categories' => Category::all(['id', 'name']),
         ]);
     }
 
