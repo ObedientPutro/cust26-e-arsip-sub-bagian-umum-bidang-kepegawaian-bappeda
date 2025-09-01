@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Letter;
 use App\Services\IncomingLetterService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class IncomingLetterController extends Controller
@@ -87,6 +88,8 @@ class IncomingLetterController extends Controller
      */
     public function edit(Letter $letter): \Inertia\Response
     {
+        if ($letter->user_id != auth()->user()->id && Gate::denies('manage-incoming-letters')) abort(403);
+
         return Inertia::render('IncomingLetter/IncomingLetterForm', [
             'letter' => $letter,
         ]);
@@ -107,6 +110,8 @@ class IncomingLetterController extends Controller
      */
     public function destroy(Letter $letter): \Illuminate\Http\RedirectResponse
     {
+        if ($letter->user_id != auth()->user()->id && Gate::denies('manage-incoming-letters')) abort(403);
+
         $this->incomingLetterService->deleteData($letter);
 
         return redirect()->route('incomingLetter.index')->with('success', 'Surat masuk berhasil dihapus.');

@@ -14,7 +14,7 @@ class StoreIncomingLetterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create-incoming-letter');
+        return auth()->check();
     }
 
     /**

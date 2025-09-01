@@ -5,7 +5,7 @@ import DataTable from "@/Components/DataTable.vue";
 import dayjs from 'dayjs';
 import 'dayjs/locale/en';
 import { defineProps, ref, watch } from 'vue';
-import { Head, router, useForm, Link } from '@inertiajs/vue3';
+import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
 import {
     TrashIcon,
@@ -18,6 +18,8 @@ import {
 defineOptions({
     layout: AuthenticatedLayout
 });
+
+const auth = usePage().props.auth;
 
 const props = defineProps({
     letters: Object,
@@ -145,20 +147,36 @@ const headers = [
                             <EyeIcon class="icon"/>
                         </a>
                     </div>
-                    <div class="tooltip" data-tip="Buat Disposisi">
+                    <div v-if="auth.permissions.canManageDisposition" class="tooltip" data-tip="Buat Disposisi">
                         <a :href="route('dispositionIncomingLetter.new', item.id)" class="btn btn-primary btn-sm text-white">
                             <UserPlusIcon class="icon"/>
                         </a>
                     </div>
-                    <div class="tooltip" data-tip="Ubah">
-                        <a :href="route('incomingLetter.modify', item.id)" class="btn btn-warning btn-sm text-white">
-                            <PencilSquareIcon class="icon"/>
-                        </a>
+
+                    <div>
+                        <div v-if="auth.permissions.canManageIncomingLetters || auth.user.id === item.user_id" class="tooltip" data-tip="Ubah">
+                            <a :href="route('incomingLetter.modify', item.id)" class="btn btn-warning btn-sm text-white">
+                                <PencilSquareIcon class="icon"/>
+                            </a>
+                        </div>
+                        <div v-else class="tooltip" data-tip="Ubah">
+                            <a class="btn btn-warning btn-sm text-white" disabled="">
+                                <PencilSquareIcon class="icon"/>
+                            </a>
+                        </div>
                     </div>
-                    <div class="tooltip" data-tip="Hapus">
-                        <button @click="confirmDelete(item)" class="btn btn-error btn-sm text-white">
-                            <TrashIcon class="icon"/>
-                        </button>
+
+                    <div>
+                        <div v-if="auth.permissions.canManageIncomingLetters || auth.user.id === item.user_id" class="tooltip" data-tip="Hapus">
+                            <button @click="confirmDelete(item)" class="btn btn-error btn-sm text-white">
+                                <TrashIcon class="icon"/>
+                            </button>
+                        </div>
+                        <div v-else class="tooltip" data-tip="Hapus">
+                            <button class="btn btn-error btn-sm text-white" disabled>
+                                <TrashIcon class="icon"/>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </template>

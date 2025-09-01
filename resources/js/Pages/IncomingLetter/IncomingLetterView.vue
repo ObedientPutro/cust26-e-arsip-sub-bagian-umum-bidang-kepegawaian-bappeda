@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import {Head, Link, usePage} from "@inertiajs/vue3";
 import dayjs from "dayjs";
 import {
     PencilSquareIcon,
@@ -10,6 +10,8 @@ import {
 } from "@heroicons/vue/24/solid";
 
 defineOptions({ layout: AuthenticatedLayout });
+
+const auth = usePage().props.auth;
 
 const props = defineProps({
     letter: Object,
@@ -59,7 +61,7 @@ const formatDate = (date) => dayjs(date).format('DD MMMM YYYY, HH:mm');
                                     Dibuat oleh <strong>{{ disposition.user.name }}</strong> pada {{ formatDate(disposition.created_at) }}
                                 </p>
                             </div>
-                            <div class="flex gap-2">
+                            <div v-if="auth.permissions.canManageDisposition" class="flex gap-2">
                                 <Link :href="route('dispositionIncomingLetter.modify', disposition.id)" class="btn btn-xs btn-outline btn-warning">
                                     <PencilSquareIcon class="size-4" />
                                 </Link>

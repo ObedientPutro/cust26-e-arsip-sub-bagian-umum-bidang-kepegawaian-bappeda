@@ -9,6 +9,7 @@ use App\Models\Letter;
 use App\Models\User;
 use App\Services\DispositionService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class DispositionController extends Controller
@@ -30,6 +31,8 @@ class DispositionController extends Controller
      */
     public function create(Request $request, Letter $letter): \Inertia\Response
     {
+        if (Gate::denies('manage-disposition')) abort(403);
+
         $users = User::query()
             ->where('role', 'pegawai')
             ->when($request->input('search'), function ($q, $search) {
@@ -68,6 +71,8 @@ class DispositionController extends Controller
      */
     public function edit(Request $request, Disposition $disposition): \Inertia\Response
     {
+        if (Gate::denies('manage-disposition')) abort(403);
+
         $disposition->load(['recipients']);
         $letter = Letter::findOrFail($disposition->letter_id);
 

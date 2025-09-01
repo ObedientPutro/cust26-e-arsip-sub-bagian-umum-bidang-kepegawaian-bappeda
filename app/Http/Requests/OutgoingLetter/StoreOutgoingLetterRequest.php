@@ -12,7 +12,7 @@ class StoreOutgoingLetterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create-outgoing-letter');
+        return auth()->check();
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\IncomingLetter;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class UpdateIncomingLetterRequest extends FormRequest
@@ -12,7 +13,7 @@ class UpdateIncomingLetterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('update-incoming-letter');
+        return $this->user()->user_id === $this->incoming_letter_id || Gate::allows('manage-incoming-letters');
     }
 
     /**

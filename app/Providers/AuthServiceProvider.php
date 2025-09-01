@@ -34,27 +34,15 @@ class AuthServiceProvider extends ServiceProvider
             return $user->role === UserRoleEnum::Employee;
         });
 
-        Gate::define('create-incoming-letter', function (User $user) {
-            return in_array($user->role, [UserRoleEnum::Admin, UserRoleEnum::Lead, UserRoleEnum::Employee]);
-        });
-
-        Gate::define('update-incoming-letter', function (User $user) {
-            return in_array($user->role, [UserRoleEnum::Admin, UserRoleEnum::Lead, UserRoleEnum::Employee]);
-        });
-
-        Gate::define('create-outgoing-letter', function (User $user) {
-            return in_array($user->role, [UserRoleEnum::Admin, UserRoleEnum::Lead, UserRoleEnum::Employee]);
-        });
-
-        Gate::define('update-outgoing-letter', function (User $user) {
-            return in_array($user->role, [UserRoleEnum::Admin, UserRoleEnum::Lead, UserRoleEnum::Employee]);
-        });
-
-        Gate::define('create-disposition', function (User $user) {
+        Gate::define('manage-incoming-letters', function (User $user) {
             return in_array($user->role, [UserRoleEnum::Admin, UserRoleEnum::Lead]);
         });
 
-        Gate::define('update-disposition', function (User $user) {
+        Gate::define('manage-outgoing-letters', function (User $user) {
+            return in_array($user->role, [UserRoleEnum::Admin, UserRoleEnum::Lead]);
+        });
+
+        Gate::define('manage-disposition', function (User $user) {
             return in_array($user->role, [UserRoleEnum::Admin, UserRoleEnum::Lead]);
         });
     }

@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Letter;
 use App\Services\OutgoingLetterService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class OutgoingLetterController extends Controller
@@ -94,6 +95,8 @@ class OutgoingLetterController extends Controller
      */
     public function edit(Letter $letter): \Inertia\Response
     {
+        if ($letter->user_id != auth()->user()->id && Gate::denies('manage-outgoing-letters')) abort(403);
+
         return Inertia::render('OutgoingLetter/OutgoingLetterForm', [
             'letter' => $letter,
             'categories' => Category::all(['id', 'name'])->keyBy('id'),
@@ -115,6 +118,8 @@ class OutgoingLetterController extends Controller
      */
     public function destroy(Letter $letter): \Illuminate\Http\RedirectResponse
     {
+        if ($letter->user_id != auth()->user()->id && Gate::denies('manage-outgoing-letters')) abort(403);
+
         $this->outgoingLetterService->deleteData($letter);
 
         return redirect()->route('outgoingLetter.index')->with('success', 'Surat keluar berhasil dihapus.');

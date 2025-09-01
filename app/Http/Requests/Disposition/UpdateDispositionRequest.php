@@ -11,7 +11,7 @@ class UpdateDispositionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('update-disposition');
+        return $this->user()->can('manage-disposition');
     }
 
     /**

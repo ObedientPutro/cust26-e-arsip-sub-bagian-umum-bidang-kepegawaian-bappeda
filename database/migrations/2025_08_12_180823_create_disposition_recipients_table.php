@@ -16,11 +16,13 @@ return new class extends Migration
             $table->foreignId('disposition_id')
                 ->references('id')
                 ->on('dispositions')
-                ->cascadeOnUpdate();
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->foreignId('to_user_id')
                 ->references('id')
                 ->on('users')
-                ->cascadeOnUpdate();
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->string('status');
             $table->timestamps();
         });

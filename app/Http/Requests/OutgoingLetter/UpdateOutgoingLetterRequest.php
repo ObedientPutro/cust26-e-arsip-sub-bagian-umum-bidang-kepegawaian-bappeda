@@ -3,6 +3,7 @@
 namespace App\Http\Requests\OutgoingLetter;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class UpdateOutgoingLetterRequest extends FormRequest
@@ -12,7 +13,7 @@ class UpdateOutgoingLetterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('update-outgoing-letter');
+        return $this->user()->user_id === $this->incoming_letter_id || Gate::allows('manage-outgoing-letters');
     }
 
     /**
