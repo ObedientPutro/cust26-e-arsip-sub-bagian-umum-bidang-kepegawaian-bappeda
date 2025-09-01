@@ -54,15 +54,9 @@ const readHeaders = [
                 <template #icon><PaperAirplaneIcon /></template>
             </SmallCard>
         </div>
-        <div class="card bg-base-100 shadow-md mt-8">
-            <div class="card-body">
-                <h2 class="card-title">Tren Surat Bulan Ini</h2>
-                <VueApexCharts type="area" :options="chartOptions" :series="dashboardData.chart.series" />
-            </div>
-        </div>
     </div>
 
-    <div v-if="$page.props.auth.user.role === 'pimpinan'" class="mt-8">
+    <div v-if="$page.props.auth.user.role === 'pimpinan' || $page.props.auth.user.role === 'admin'" class="mt-8">
         <div class="card bg-base-100 shadow-md">
             <div class="card-body">
                 <h2 class="card-title">Tren Surat Bulan Ini</h2>

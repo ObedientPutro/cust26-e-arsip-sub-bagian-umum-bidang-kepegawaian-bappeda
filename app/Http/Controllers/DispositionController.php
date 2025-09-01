@@ -106,4 +106,23 @@ class DispositionController extends Controller
     {
         return redirect()->route('incomingLetter.index');
     }
+
+    /**
+     * Generate and merge the disposition sheet with the original letter PDF.
+     */
+    public function generateDispositionSheetPdf(Letter $letter)
+    {
+        try {
+            $mergedPdfContent = $this->dispositionService->generateAndMergeDispositionPdf($letter);
+            $fileName = 'Disposisi Surat Masuk - ' . str_replace('/', '_', $letter->letter_number) . '.pdf';
+
+            return response($mergedPdfContent, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="'.$fileName.'"'
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal membuat PDF: ' . $e->getMessage());
+        }
+    }
 }

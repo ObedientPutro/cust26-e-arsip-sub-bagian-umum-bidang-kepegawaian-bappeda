@@ -41,7 +41,7 @@ const formatDate = (date) => dayjs(date).format('DD MMMM YYYY, HH:mm');
                     <div><strong>Diinput Oleh:</strong> {{ letter.user.name }}</div>
                 </div>
                 <div class="card-actions justify-end mt-4">
-                    <a :href="route('document.file', letter.id)" target="_blank" class="btn btn-outline btn-primary">
+                    <a :href="route('dispositionIncomingLetter.print', letter.id)" target="_blank" class="btn btn-outline btn-primary">
                         <DocumentTextIcon class="size-5" />
                         Lihat Lampiran
                     </a>

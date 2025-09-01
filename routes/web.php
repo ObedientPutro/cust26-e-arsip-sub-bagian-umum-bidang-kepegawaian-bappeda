@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
     ])->except('create', 'store');
     Route::get('/disposition-incoming-letter/create/{letter}', [DispositionController::class, 'create'])->name('dispositionIncomingLetter.new');
     Route::post('/disposition-incoming-letter/store/{letter}', [DispositionController::class, 'store'])->name('dispositionIncomingLetter.save');
+    Route::get('/disposition-incoming-letter/{letter}/print', [DispositionController::class, 'generateDispositionSheetPdf'])->name('dispositionIncomingLetter.print');
 });
 
 Route::middleware(['auth', 'can:is-admin'])->group(function () {
